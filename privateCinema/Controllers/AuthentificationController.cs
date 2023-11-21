@@ -29,5 +29,6 @@ namespace privateCinema.Controllers
             if (res.success) { return Ok(res); }
             return BadRequest(res);
         }
+        
     }
 }

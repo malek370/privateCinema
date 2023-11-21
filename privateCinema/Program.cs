@@ -1,8 +1,11 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using privateCinema.DataAccess;
 using privateCinema.Services.AuthServices;
+using System.Text;
 
 namespace privateCinema
 {
@@ -31,7 +34,25 @@ namespace privateCinema
                 AddEntityFrameworkStores<CinemaDbContext>().
                 AddDefaultTokenProviders();
 
-            
+            builder.Services.AddAuthentication(Options =>
+            {
+                Options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                Options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                Options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.SaveToken = true;
+                options.RequireHttpsMetadata = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidAudience = builder.Configuration["JWTKey:ValidAudience"],
+                    ValidIssuer = builder.Configuration["JWTKey:ValidIssuer"],
+                    ClockSkew = TimeSpan.Zero,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTKey:Secret"]!))
+                };
+            });
             var app = builder.Build();
 
             
