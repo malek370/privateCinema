@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using privateCinema.DataAccess;
 using privateCinema.Services.AuthServices;
+using privateCinema.Services.UsersServices;
 using System.Text;
 
 namespace privateCinema
@@ -19,7 +20,9 @@ namespace privateCinema
 
             builder.Services.AddControllers();
             builder.Services.AddControllers();
+            builder.Services.AddHttpContextAccessor();
             builder.Services.AddTransient<IAuthService, AuthService>();
+            builder.Services.AddScoped<IUserServices, UserServices>();
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
             builder.Services.AddDbContext<CinemaDbContext>(Options =>
