@@ -8,5 +8,6 @@ namespace privateCinema.Services.RoomServices
         Task<Response<object>> DeleteRoom(string RoomName);
         Task<Response<List<GetRoomDTO>>> GetALL();
         Task<Response<GetRoomDTO>> GetByName(string RoomName);
+        Task<Response<object>> CleanRoom(string RoomName);
     }
 }

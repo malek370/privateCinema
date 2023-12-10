@@ -3,10 +3,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using privateCinema.DataAccess;
 using privateCinema.Services.AuthServices;
+using privateCinema.Services.MovieServices;
+using privateCinema.Services.ReservationService;
 using privateCinema.Services.RoomServices;
 using privateCinema.Services.UsersServices;
+using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
 namespace privateCinema
@@ -27,6 +31,8 @@ namespace privateCinema
             builder.Services.AddTransient<IAuthService, AuthService>();
             builder.Services.AddScoped<IUserServices, UserServices>();
             builder.Services.AddScoped<IRoomService,RoomService>();
+            builder.Services.AddScoped<IMovieService, MovieService>();
+            builder.Services.AddScoped<IResertvationService,ReservationService>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
@@ -34,6 +40,18 @@ namespace privateCinema
             Options.UseSqlServer(
                 builder.Configuration.GetConnectionString("DefaultConnection"))
                 );
+            builder.Services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    Description = """standard authorization header using bearerscheme. Exemple: "bearer {token}" """,
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                }
+                    );
+                c.OperationFilter<SecurityRequirementsOperationFilter>();
+            });
             builder.Services.AddIdentity<IdentityUser, IdentityRole>(Options =>
 
                 Options.Password.RequiredLength = 5

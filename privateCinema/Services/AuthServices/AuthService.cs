@@ -26,7 +26,8 @@ namespace privateCinema.Services.AuthServices
             var result = new Response<object>();
             try
             {
-                if(await _userManager.FindByEmailAsync(reguser.Email)!=null) { throw new Exception("user exists"); }
+                
+                if (await _userManager.FindByEmailAsync(reguser.Email)!=null) { throw new Exception("user exists"); }
                 var user = new IdentityUser()
                 {
                     UserName = reguser.Username,
@@ -34,6 +35,23 @@ namespace privateCinema.Services.AuthServices
                     PhoneNumber = reguser.PhoneNumber,
                 };
                 var created=await _userManager.CreateAsync(user, reguser.Password);
+                //use this to initialise roles
+                /*
+                if (user.UserName == "Admin") 
+                {
+                    {
+                      "email": "admin@gmail.com",
+                      "password": "Admin@123",
+                      "username": "Admin",
+                      "phoneNumber": "29491822"
+                    }
+                    await _roleManager.CreateAsync(new IdentityRole(Role.Admin));
+                    await _roleManager.CreateAsync(new IdentityRole(Role.Client));
+                    await _roleManager.CreateAsync(new IdentityRole(Role.Staff));
+                    await _userManager.AddToRoleAsync(user, Role.Admin); 
+                }
+                else 
+                */
                 await _userManager.AddToRoleAsync(user,Role.Client);
                 if(!created.Succeeded) { throw new Exception(created.Errors.FirstOrDefault()!.Description.ToString()); }
                 result.message = "registredf successfully";

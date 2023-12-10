@@ -6,7 +6,7 @@ namespace privateCinema.Models
     public class Room
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public string Id { get; set; }
+        public string? Id { get; set; }
         [Required]
         public DateTime CreationDate { get; set; }= DateTime.Now;
         [Required]
@@ -16,7 +16,7 @@ namespace privateCinema.Models
         public int Capacity { get; set; }
         [Required]
         public bool Clean { get; set; } = true;
-
+        public List<Reservation>? Reservations { get; set; }
 
     }
 }

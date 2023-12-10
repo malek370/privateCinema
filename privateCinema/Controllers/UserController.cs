@@ -16,6 +16,7 @@ namespace privateCinema.Controllers
         {
             _userServices = userServices;
         }
+        [Authorize(Roles ="Admin")]
         [HttpGet("allUsers")]
         public async Task<IActionResult> Get()
         {
@@ -24,12 +25,14 @@ namespace privateCinema.Controllers
             return BadRequest(res);
         }
         [HttpGet("GetByEmail")]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetByEmail(string email)
         {
            var res=await _userServices.GetByEmail(email);
             if (res.success) return Ok(res);
             return BadRequest(res);
         }
+        [Authorize(Roles = "Admin")]
         [HttpPut("changeRole")]
         public async Task<IActionResult> changeRole(AddRoleDTO userole)
         {
@@ -37,6 +40,7 @@ namespace privateCinema.Controllers
             if (res.success) return Ok(res);
             return BadRequest(res);
         }
+        [Authorize(Roles = "Admin")]
         [HttpDelete("RemoveUser")]
         public async Task<IActionResult> RemoveUser(string email)
         {
@@ -44,7 +48,22 @@ namespace privateCinema.Controllers
             if (res.success) return Ok(res);
             return BadRequest(res);
         }
-
+        [Authorize(Roles = "Staff,Admin")]
+        [HttpGet("client")]
+        public async Task<IActionResult> GetClientByEmail(string email)
+        {
+            var res = await _userServices.GetClientByEmail(email);
+            if (res.success) return Ok(res);
+            return BadRequest(res);
+        }
+        [Authorize(Roles = "Staff,Admin")]
+        [HttpGet("allClients")]
+        public async Task<IActionResult> GetClients()
+        {
+            var res = await _userServices.GetClientts();
+            if (res.success) return Ok(res);
+            return BadRequest(res);
+        }
 
     }
 }

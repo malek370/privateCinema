@@ -21,6 +21,28 @@ namespace privateCinema.Services.UsersServices
             _contextAccessor = contextAccessor;
         }
 
+
+        public async Task<Response<List<GetUserDTO>>> GetClientts()
+        {
+            var result = new Response<List<GetUserDTO>>();
+            result.data = new List<GetUserDTO>();
+            try
+            {
+                var users = await _userManager.GetUsersInRoleAsync(Role.Client);
+                foreach (var user in users)
+                {
+                    result.data.Add(new GetUserDTO()
+                    {
+                        Id = user.Id,
+                        UserName = user.UserName!,
+                        Email = user.Email!,
+                        Role = _userManager.GetRolesAsync(user).Result.ToList()[0]
+                    });
+                }
+            }
+            catch (Exception ex) { result.message = ex.Message; result.success = false; }
+            return result;
+        }
         public async Task<Response<List<GetUserDTO>>> GetAll()
         {
             var result = new Response<List<GetUserDTO>>();
@@ -50,6 +72,30 @@ namespace privateCinema.Services.UsersServices
             {
                 var user = await _userManager.FindByEmailAsync(email);
                 if (user == null) { throw new Exception("user not found"); }
+                {
+                    result.data = new GetUserDTO()
+                    {
+                        Id = user.Id,
+                        UserName = user.UserName!,
+                        Email = user.Email!,
+                        Role = _userManager.GetRolesAsync(user).Result.ToList()[0]
+                    };
+                }
+            }
+            catch (Exception ex) { result.message = ex.Message; result.success = false; }
+            return result;
+        }
+
+        public async Task<Response<GetUserDTO>> GetClientByEmail(string email)
+        {
+            var result = new Response<GetUserDTO>();
+            result.data = null;
+            try
+            {
+                var user = await _userManager.FindByEmailAsync(email);
+                if (user == null ) { throw new Exception("client not found"); }
+                var user_role = await _userManager.GetRolesAsync(user);
+                if (user_role[0] != Role.Client ) { throw new Exception("client not found"); }
                 {
                     result.data = new GetUserDTO()
                     {

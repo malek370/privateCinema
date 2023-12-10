@@ -8,5 +8,7 @@ namespace privateCinema.Services.UsersServices
         Task<Response<object>> DeleteUser(string email);
         Task<Response<List<GetUserDTO>>> GetAll();
         Task<Response<GetUserDTO>> GetByEmail(string email);
+        Task<Response<List<GetUserDTO>>> GetClientts();
+        Task<Response<GetUserDTO>> GetClientByEmail(string email);
     }
 }

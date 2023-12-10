@@ -49,7 +49,7 @@ namespace privateCinema.Services.RoomServices
             try
             {
                 var room = await _context.Rooms.FirstOrDefaultAsync(r => r.Name == RoomName);
-                if (room == null) { throw new Exception("room name already exists"); }
+                if (room == null) { throw new Exception("room not found"); }
                 result.data = _mapper.Map<GetRoomDTO>(room);
             }
             catch (Exception ex) { result.message = ex.Message; result.success = false; }
@@ -65,6 +65,19 @@ namespace privateCinema.Services.RoomServices
                 _context.Rooms.Remove(room);
                 await _context.SaveChangesAsync();
                 result.message = "room deleted successfully";
+            }
+            catch (Exception ex) { result.message = ex.Message; result.success = false; }
+            return result;
+        }
+        public async Task<Response<object>> CleanRoom(string RoomName)
+        {
+            var result = new Response<object>();
+            try
+            {
+                var room = await _context.Rooms.FirstOrDefaultAsync(r => r.Name == RoomName);
+                if (room == null) { throw new Exception("room not found"); }
+                room.Clean=true;
+                await _context.SaveChangesAsync();
             }
             catch (Exception ex) { result.message = ex.Message; result.success = false; }
             return result;
