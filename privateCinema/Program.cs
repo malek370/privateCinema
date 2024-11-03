@@ -1,19 +1,16 @@
+using Ath.DataAccess;
+using Ath.Services.AuthServices;
+using Ath.Services.MovieServices;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using privateCinema.DataAccess;
-using privateCinema.Services.AuthServices;
-using privateCinema.Services.MovieServices;
-using privateCinema.Services.ReservationService;
-using privateCinema.Services.RoomServices;
-using privateCinema.Services.UsersServices;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
 
-namespace privateCinema
+namespace Ath
 {
     public class Program
     {
@@ -24,19 +21,15 @@ namespace privateCinema
             // Add services to the container.
 
             builder.Services.AddControllers();
-            builder.Services.AddControllers();
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddAutoMapper(typeof(Program));
 
             builder.Services.AddTransient<IAuthService, AuthService>();
-            builder.Services.AddScoped<IUserServices, UserServices>();
-            builder.Services.AddScoped<IRoomService,RoomService>();
             builder.Services.AddScoped<IMovieService, MovieService>();
-            builder.Services.AddScoped<IResertvationService,ReservationService>();
 
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
-            builder.Services.AddDbContext<CinemaDbContext>(Options =>
+            builder.Services.AddDbContext<AuthDbContext>(Options =>
             Options.UseSqlServer(
                 builder.Configuration.GetConnectionString("DefaultConnection"))
                 );
@@ -57,7 +50,7 @@ namespace privateCinema
                 Options.Password.RequiredLength = 5
                 //i can add more controle here
                 ).
-                AddEntityFrameworkStores<CinemaDbContext>().
+                AddEntityFrameworkStores<AuthDbContext>().
                 AddDefaultTokenProviders();
 
             builder.Services.AddAuthentication(Options =>
@@ -81,10 +74,10 @@ namespace privateCinema
             });
             var app = builder.Build();
 
-            
-                app.UseSwagger();
-                app.UseSwaggerUI();
-            
+
+            app.UseSwagger();
+            app.UseSwaggerUI();
+
             // Configure the HTTP request pipeline.
 
             app.UseHttpsRedirection();

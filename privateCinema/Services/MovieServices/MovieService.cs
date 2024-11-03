@@ -1,19 +1,19 @@
-﻿using AutoMapper;
+﻿using Ath.DataAccess;
+using Ath.DTOs.MovieDTO;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using privateCinema.DataAccess;
-using privateCinema.DTOs.MovieDTO;
-using privateCinema.Models;
+using Ath.Models;
 
-namespace privateCinema.Services.MovieServices
+namespace Ath.Services.MovieServices
 {
     public class MovieService : IMovieService
     {
-        private readonly CinemaDbContext _context;
-        public MovieService(CinemaDbContext cinemaDb)
+        private readonly AuthDbContext _context;
+        public MovieService(AuthDbContext cinemaDb)
         {
             _context = cinemaDb;
-            
+
         }
 
         public async Task<Response<object>> Creat(CreatMovieDTO creatmovie)
@@ -79,18 +79,21 @@ namespace privateCinema.Services.MovieServices
             try
             {
                 List<GetMovieDTO> movies;
-                if (string.IsNullOrEmpty(name)) { movies =await _context.Movies.Select(u=>new GetMovieDTO()
+                if (string.IsNullOrEmpty(name))
                 {
-                    Id=u.Id,
-                    Title=u.Title,
-                    Genres=u.Genres,
-                    Overview=u.Overview,
-                    Runtime=u.Runtime,
-                    ProdCompanies=u.ProdCompanies,
-                    Rate=u.Rate,
-                    ReleaseDate=DateOnly.FromDateTime(u.ReleaseDate)
-                }).ToListAsync(); }
-                else movies  = await _context.Movies.Where(m => m.Title!.ToLower().Contains(name.ToLower())).Select(u => new GetMovieDTO()
+                    movies = await _context.Movies.Select(u => new GetMovieDTO()
+                    {
+                        Id = u.Id,
+                        Title = u.Title,
+                        Genres = u.Genres,
+                        Overview = u.Overview,
+                        Runtime = u.Runtime,
+                        ProdCompanies = u.ProdCompanies,
+                        Rate = u.Rate,
+                        ReleaseDate = DateOnly.FromDateTime(u.ReleaseDate)
+                    }).ToListAsync();
+                }
+                else movies = await _context.Movies.Where(m => m.Title!.ToLower().Contains(name.ToLower())).Select(u => new GetMovieDTO()
                 {
                     Id = u.Id,
                     Title = u.Title,
@@ -112,8 +115,8 @@ namespace privateCinema.Services.MovieServices
             var result = new Response<List<GetMovieDTO>>();
             try
             {
-                
-                var movies = await _context.Movies.Where(m =>m.Keywords!.Contains(keyword)).Select(u => new GetMovieDTO()
+
+                var movies = await _context.Movies.Where(m => m.Keywords!.Contains(keyword)).Select(u => new GetMovieDTO()
                 {
                     Id = u.Id,
                     Title = u.Title,
@@ -129,7 +132,7 @@ namespace privateCinema.Services.MovieServices
             catch (Exception ex) { result.message = ex.Message; result.success = false; }
             return result;
         }
-        private static Boolean CheckKeyword(string s, List<string> l)
+        private static bool CheckKeyword(string s, List<string> l)
         {
             foreach (var item in l)
             {

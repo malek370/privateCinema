@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace privateCinema.DTOs.LoginDTOs
+namespace Ath.DTOs.LoginDTOs
 {
     public class RegisterDTO
     {
@@ -10,7 +10,7 @@ namespace privateCinema.DTOs.LoginDTOs
         [Required(ErrorMessage = "password is required")]
         public string Password { get; set; } = "";
 
-        public string Username { get; set; }="";
+        public string Username { get; set; } = "";
         public string PhoneNumber { get; set; } = "";
 
     }

@@ -1,26 +1,25 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Ath.DTOs.LoginDTOs;
+using Ath.Services.AuthServices;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using privateCinema.DTOs.LoginDTOs;
-using privateCinema.Services;
-using privateCinema.Services.AuthServices;
 
-namespace privateCinema.Controllers
+namespace Ath.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
     public class AuthentificationController : ControllerBase
-     {
+    {
         private readonly IAuthService _authService;
         public AuthentificationController(IAuthService authService)
         {
             _authService = authService;
         }
-        [HttpPost("Login")] 
+        [HttpPost("Login")]
         public async Task<IActionResult> Login(LoginDTO loguser)
         {
-            var res=await _authService.Login(loguser);
-            if(res.success) { return Ok(res); }
+            var res = await _authService.Login(loguser);
+            if (res.success) { return Ok(res); }
             return BadRequest(res);
         }
         [HttpPost("Register")]
@@ -30,6 +29,6 @@ namespace privateCinema.Controllers
             if (res.success) { return Ok(res); }
             return BadRequest(res);
         }
-        
+
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace privateCinema.DTOs.MovieDTO
+﻿namespace Ath.DTOs.MovieDTO
 {
     public class CreatMovieDTO
     {

@@ -1,7 +1,6 @@
-﻿using privateCinema.DTOs.MovieDTO;
-using privateCinema.Models;
+﻿using Ath.DTOs.MovieDTO;
 
-namespace privateCinema.Services.MovieServices
+namespace Ath.Services.MovieServices
 {
     public interface IMovieService
     {

@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace privateCinema.DTOs.LoginDTOs
+namespace Ath.DTOs.LoginDTOs
 {
     public class LoginDTO
     {

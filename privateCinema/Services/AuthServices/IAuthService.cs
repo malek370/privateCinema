@@ -1,6 +1,6 @@
-﻿using privateCinema.DTOs.LoginDTOs;
+﻿using Ath.DTOs.LoginDTOs;
 
-namespace privateCinema.Services.AuthServices
+namespace Ath.Services.AuthServices
 {
     public interface IAuthService
     {

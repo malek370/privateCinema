@@ -1,14 +1,12 @@
-﻿using AutoMapper;
-using privateCinema.DTOs.RoomDTO;
-using privateCinema.Models;
+﻿using Ath.Models;
+using AutoMapper;
 
-namespace privateCinema
+namespace Ath
 {
-    public class MapperProfile:Profile
+    public class MapperProfile : Profile
     {
         public MapperProfile()
         {
-            CreateMap<Room, GetRoomDTO>();
         }
     }
 }
